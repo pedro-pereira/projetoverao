@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="com.pedropereira.projetoverao.FormularioPesagemActivity">
+
+        <EditText
+            android:id="@+id/edt_chave_pesagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Chave"/>
+
+        <EditText
+            android:id="@+id/edt_data_hora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data/Hora"/>
+
+        <EditText
+            android:id="@+id/edt_momento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Momento"/>
+
+        <EditText
+            android:id="@+id/edt_local"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Local"/>
+
+        <EditText
+            android:id="@+id/edt_peso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Peso"/>
+
+        <Button
+            android:id="@+id/btn_inserir_pesagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar"/>
+
+    </LinearLayout>
+</ScrollView>
