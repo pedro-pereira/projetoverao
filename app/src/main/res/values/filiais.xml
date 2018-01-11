@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filiais">
+        <item>Barbosa de Freitas</item>
+        <item>Iracema - Mons. Tabosa</item>
+        <item>Barão de Studart</item>
+        <item>Montese - Extra</item>
+        <item>Meireles - Virgílio Távora</item>
+        <item>North Shopping - Bezerra de Menezes</item>
+        <item>Cocó</item>
+        <item>RioMar Kennedy</item>
+        <item>Parangaba</item>
+        <item>North Shopping Jóquei</item>
+        <item>Washington Soares - Unifor</item>
+        <item>Oliveira Paiva - Cidade dos Funcionários</item>
+        <item>Via Sul Shopping</item>
+    </string-array>
+</resources>

@@ -11,41 +11,118 @@
         android:orientation="vertical"
         tools:context="com.pedropereira.projetoverao.FormularioPesagemActivity">
 
-        <EditText
-            android:id="@+id/edt_chave_pesagem"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Chave"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/edt_data_hora"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Data/Hora"/>
+            <Button
+                android:id="@+id/btn_data"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:layout_weight="0.4"
+                android:text="Data" />
 
-        <EditText
-            android:id="@+id/edt_momento"
+            <EditText
+                android:id="@+id/edt_data"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/btn_data"
+                android:layout_weight="0.4"
+                android:singleLine="false" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_horario"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="11dp"
+                android:text="Hora" />
+
+            <EditText
+                android:id="@+id/edt_horario"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/btn_horario" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_capturar_localizacao"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="11dp"
+                android:layout_weight="1"
+                android:text="Localizacao" />
+
+            <TextView
+                android:id="@+id/txtLatitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/txtLongitude"
+                android:layout_weight="1"
+                android:text="Latitude: " />
+
+            <TextView
+                android:id="@+id/txtLongitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/btn_capturar_localizacao"
+                android:layout_marginStart="143dp"
+                android:layout_weight="1"
+                android:text="Longitude: " />
+        </RelativeLayout>
+
+        <Spinner
+            android:id="@+id/spn_filial"
+            android:layout_width="362dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="12dp"
+            android:hint="Unidade"/>
+
+        <Spinner
+            android:id="@+id/spn_momento"
+            android:layout_width="362dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="12dp"
             android:hint="Momento"/>
 
         <EditText
-            android:id="@+id/edt_local"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Local"/>
-
-        <EditText
             android:id="@+id/edt_peso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Peso"/>
+            android:layout_width="362dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="12dp"
+            android:hint="Peso" />
 
         <Button
             android:id="@+id/btn_inserir_pesagem"
-            android:layout_width="match_parent"
+            android:layout_width="364dp"
             android:layout_height="wrap_content"
-            android:text="Salvar"/>
+            android:layout_marginLeft="12dp"
+            android:text="Cadastrar" />
 
     </LinearLayout>
+
 </ScrollView>

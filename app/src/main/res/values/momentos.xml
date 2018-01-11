@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="momentos">
+        <item>Antes treino</item>
+        <item>Durante treino</item>
+        <item>Após treino</item>
+    </string-array>
+</resources>

@@ -1,9 +1,19 @@
 package com.pedropereira.projetoverao.modelo;
 
+import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import com.pedropereira.projetoverao.FormularioPesagemActivity;
 import com.pedropereira.projetoverao.R;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Pedro.Pereira on 28/12/2017.
@@ -13,36 +23,88 @@ public class PesagemHelper {
 
     private Pesagem pesagem;
 
-    private EditText campoChave;
-    private EditText campoDataHora;
-    private EditText campoMomento;
-    private EditText campoLocal;
+    private EditText campoData;
+    private EditText campoHorario;
+    private TextView campoLatitude;
+    private TextView campoLongitude;
+    private Spinner campoFilial;
+    private Spinner campoMomento;
     private EditText campoPeso;
 
     public PesagemHelper(FormularioPesagemActivity formulario) {
-
-        campoChave = (EditText) formulario.findViewById(R.id.edt_chave_pesagem);
-        campoDataHora = (EditText) formulario.findViewById(R.id.edt_data_hora);
-        campoMomento = (EditText) formulario.findViewById(R.id.edt_momento);
-        campoLocal = (EditText) formulario.findViewById(R.id.edt_local);
+        campoData = (EditText) formulario.findViewById(R.id.edt_data);
+        campoHorario = (EditText) formulario.findViewById(R.id.edt_horario);
+        campoLatitude = (TextView) formulario.findViewById(R.id.txtLatitude);
+        campoLongitude = (TextView) formulario.findViewById(R.id.txtLongitude);
+        campoFilial = (Spinner) formulario.findViewById(R.id.spn_filial);
+        campoMomento = (Spinner) formulario.findViewById(R.id.spn_momento);
         campoPeso = (EditText) formulario.findViewById(R.id.edt_peso);
-
     }
 
     public Pesagem getPesagemDoFormulario() {
-        Long chave = new Long(campoChave.getText().toString());
-        String dataHora = campoDataHora.getText().toString();
-        String momento = campoMomento.getText().toString();
-        String local = campoLocal.getText().toString();
-        Double peso = new Double(campoPeso.getText().toString());
+
+        String data = campoData.getText().toString();
+        String horario = campoHorario.getText().toString();
+        Double latitude = Double.valueOf(campoLatitude.getText().toString());
+        Double longitude = Double.valueOf(campoLongitude.getText().toString());
+        String filial = campoFilial.getSelectedItem().toString();
+        String momento = campoMomento.getSelectedItem().toString();
+        Double peso = Double.valueOf(campoPeso.getText().toString());
+
+        Date dataFormatada = null;
+        try {
+            String temp = data + "," + horario;
+            DateFormat formatter = new SimpleDateFormat("d-MM-yyyy,HH:mm");
+            dataFormatada = formatter.parse(temp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         Pesagem pesagem = new Pesagem();
-        pesagem.setChave(chave);
-        pesagem.setDataHora(dataHora);
+
+        pesagem.setDataHora(dataFormatada);
+        pesagem.setLatitude(latitude);
+        pesagem.setLongitude(longitude);
+        pesagem.setFilial(filial);
         pesagem.setMomento(momento);
-        pesagem.setLocal(local);
         pesagem.setPeso(peso);
 
         return pesagem;
+    }
+
+    public void carregaPesagemNoFormulario(Pesagem pesagem, android.content.Context contexto) {
+
+        ArrayAdapter<CharSequence> adapter;
+        int spinnerPosition = 0;
+
+        adapter = ArrayAdapter.createFromResource(contexto, R.array.filiais, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        campoFilial.setAdapter(adapter);
+        if (pesagem.getFilial() != null) {
+            spinnerPosition = adapter.getPosition(pesagem.getFilial());
+            campoFilial.setSelection(spinnerPosition);
+        }
+
+        DateFormat formatter = new SimpleDateFormat("d-MM-yyyy");
+        String dataFormatada = formatter.format(pesagem.getDataHora());
+        campoData.setText(dataFormatada);
+
+        formatter = new SimpleDateFormat("HH:mm");
+        String horaFormatada = formatter.format(pesagem.getDataHora());
+        campoHorario.setText(horaFormatada);
+
+        campoLatitude.setText(String.valueOf(pesagem.getLatitude()));
+        campoLongitude.setText(String.valueOf(pesagem.getLongitude()));
+
+        spinnerPosition = 0;
+        adapter = ArrayAdapter.createFromResource(contexto, R.array.momentos, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        campoMomento.setAdapter(adapter);
+        if (pesagem.getMomento() != null) {
+            spinnerPosition = adapter.getPosition(pesagem.getMomento());
+            campoMomento.setSelection(spinnerPosition);
+        }
+
+        campoPeso.setText(String.valueOf(pesagem.getPeso()));
     }
 }

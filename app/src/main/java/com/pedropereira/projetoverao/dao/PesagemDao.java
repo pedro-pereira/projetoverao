@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.pedropereira.projetoverao.modelo.Pesagem;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
 public class PesagemDao extends SQLiteOpenHelper {
 
     private static final String DATABASE = "appProjetoVerao";
-    private static final int VERSAO = 1;
+    private static final int VERSAO = 5;
 
     private static final String TABELA = "PESAGEM";
 
@@ -30,9 +31,11 @@ public class PesagemDao extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String sql = "CREATE TABLE " + TABELA + " ("
                    + "chave INTEGER PRIMARY KEY, "
-                   + "dataHora TEXT, "
+                   + "dataHora DATETIME, "
+                   + "latitude REAL, "
+                   + "longitude REAL, "
+                   + "filial TEXT, "
                    + "momento TEXT, "
-                   + "local TEXT, "
                    + "peso REAL"
                    + " );";
 
@@ -47,33 +50,72 @@ public class PesagemDao extends SQLiteOpenHelper {
     }
 
     public void inserir(Pesagem pesagem) {
+        Long chave = obterProximaChavePesagem();
+
         ContentValues values = new ContentValues();
-        values.put("chave", pesagem.getChave());
-        values.put("dataHora", pesagem.getDataHora());
+        values.put("chave", chave);
+        values.put("dataHora", pesagem.getDataHora().toString());
+        values.put("latitude", pesagem.getLatitude());
+        values.put("longitude", pesagem.getLongitude());
+        values.put("filial", pesagem.getFilial());
         values.put("momento", pesagem.getMomento());
-        values.put("local", pesagem.getLocal());
         values.put("peso", pesagem.getPeso());
 
         getWritableDatabase().insert(TABELA, null, values);
     }
 
     public List<Pesagem> getLista() {
-
         List<Pesagem> lista = new ArrayList<Pesagem>();
-        String sql = "SELECT * FROM " + TABELA + ";";
+        String sql = "SELECT * FROM " + TABELA + " ORDER BY dataHora DESC;";
         Cursor c = getReadableDatabase().rawQuery(sql, null);
         Pesagem pesagem = null;
+
+        int i = 0;
 
         while (c.moveToNext()) {
             pesagem = new Pesagem();
             pesagem.setChave(c.getLong(c.getColumnIndex("chave")));
-            pesagem.setDataHora(c.getString(c.getColumnIndex("dataHora")));
+            pesagem.setDataHora(new Date(c.getString(c.getColumnIndex("dataHora"))));
+            pesagem.setLatitude(c.getDouble(c.getColumnIndex("latitude")));
+            pesagem.setLongitude(c.getDouble(c.getColumnIndex("longitude")));
+            pesagem.setFilial(c.getString(c.getColumnIndex("filial")));
             pesagem.setMomento(c.getString(c.getColumnIndex("momento")));
-            pesagem.setLocal(c.getString(c.getColumnIndex("local")));
             pesagem.setPeso(c.getDouble(c.getColumnIndex("peso")));
 
-            lista.add(pesagem);
+            lista.add(i, pesagem);
+            i = i + 1;
         }
         return lista;
+    }
+
+    public void alterar(Pesagem pesagem) {
+        ContentValues values = new ContentValues();
+        values.put("dataHora", pesagem.getDataHora().toString());
+        values.put("latitude", pesagem.getLatitude());
+        values.put("longitude", pesagem.getLongitude());
+        values.put("filial", pesagem.getFilial());
+        values.put("momento", pesagem.getMomento());
+        values.put("peso", pesagem.getPeso());
+
+        String[] argumentos = { pesagem.getChave().toString() };
+        getWritableDatabase().update(TABELA, values, "chave = ?", argumentos);
+    }
+
+    public void deletar(Pesagem pesagem) {
+        String[] argumentos = { pesagem.getChave().toString() };
+        getWritableDatabase().delete(TABELA, "chave = ?", argumentos);
+    }
+
+    public Long obterProximaChavePesagem() {
+
+        String sql = "SELECT MAX(chave) AS maiorChave FROM " + TABELA + ";";
+        Cursor c = getReadableDatabase(). rawQuery(sql, null);
+        Long maiorChave = 0L;
+
+        while (c.moveToNext()) {
+            maiorChave = c.getLong(c.getColumnIndex("maiorChave"));
+        }
+
+        return maiorChave + 1L;
     }
 }
