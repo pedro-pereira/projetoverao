@@ -124,6 +124,12 @@ public class FormularioPesagemActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Pesagem pesagemDoFormulario = helper.getPesagemDoFormulario();
+
+                if(pesagemDoFormulario.getLatitude() == null)
+                    pesagemDoFormulario.setLatitude(0.0);
+                if(pesagemDoFormulario.getLongitude() == null)
+                    pesagemDoFormulario.setLongitude(0.0);
+
                 pesagemDao = new PesagemDao(FormularioPesagemActivity.this);
 
                 if(pesagemSelecionada != null) {
@@ -232,7 +238,7 @@ public class FormularioPesagemActivity extends AppCompatActivity
                                                                              new DatePickerDialog.OnDateSetListener() {
                                                                                 @Override
                                                                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                                                                    edtData.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                                                                    edtData.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                                                                                 }
                                                                              },
                                                                              mYear,

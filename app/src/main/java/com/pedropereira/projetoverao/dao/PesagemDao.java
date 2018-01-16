@@ -8,9 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.pedropereira.projetoverao.modelo.Pesagem;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Pedro.Pereira on 28/12/2017.
@@ -19,7 +23,7 @@ import java.util.List;
 public class PesagemDao extends SQLiteOpenHelper {
 
     private static final String DATABASE = "appProjetoVerao";
-    private static final int VERSAO = 5;
+    private static final int VERSAO = 15;
 
     private static final String TABELA = "PESAGEM";
 
@@ -75,12 +79,22 @@ public class PesagemDao extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             pesagem = new Pesagem();
             pesagem.setChave(c.getLong(c.getColumnIndex("chave")));
-            pesagem.setDataHora(new Date(c.getString(c.getColumnIndex("dataHora"))));
             pesagem.setLatitude(c.getDouble(c.getColumnIndex("latitude")));
             pesagem.setLongitude(c.getDouble(c.getColumnIndex("longitude")));
             pesagem.setFilial(c.getString(c.getColumnIndex("filial")));
             pesagem.setMomento(c.getString(c.getColumnIndex("momento")));
             pesagem.setPeso(c.getDouble(c.getColumnIndex("peso")));
+
+            Date dataFormatada = null;
+            try {
+                String dataHora = c.getString(c.getColumnIndex("dataHora"));
+                SimpleDateFormat formatador = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                dataFormatada = formatador.parse(dataHora);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            pesagem.setDataHora(dataFormatada);
 
             lista.add(i, pesagem);
             i = i + 1;

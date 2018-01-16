@@ -45,16 +45,25 @@ public class PesagemHelper {
 
         String data = campoData.getText().toString();
         String horario = campoHorario.getText().toString();
-        Double latitude = Double.valueOf(campoLatitude.getText().toString());
-        Double longitude = Double.valueOf(campoLongitude.getText().toString());
+
+        Double latitude = 0.0;
+
+        if(campoLatitude.getText() != null)
+            latitude = Double.valueOf(campoLatitude.getText().toString());
+
+        Double longitude = 0.0;
+        if(campoLongitude.getText() != null)
+            longitude = Double.valueOf(campoLongitude.getText().toString());
+
         String filial = campoFilial.getSelectedItem().toString();
         String momento = campoMomento.getSelectedItem().toString();
+
         Double peso = Double.valueOf(campoPeso.getText().toString());
 
         Date dataFormatada = null;
         try {
-            String temp = data + "," + horario;
-            DateFormat formatter = new SimpleDateFormat("d-MM-yyyy,HH:mm");
+            String temp = data + ", " + horario;
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
             dataFormatada = formatter.parse(temp);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -85,7 +94,7 @@ public class PesagemHelper {
             campoFilial.setSelection(spinnerPosition);
         }
 
-        DateFormat formatter = new SimpleDateFormat("d-MM-yyyy");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatada = formatter.format(pesagem.getDataHora());
         campoData.setText(dataFormatada);
 

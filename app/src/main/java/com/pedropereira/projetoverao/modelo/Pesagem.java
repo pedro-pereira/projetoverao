@@ -1,9 +1,12 @@
 package com.pedropereira.projetoverao.modelo;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Pedro.Pereira on 28/12/2017.
@@ -77,15 +80,15 @@ public class Pesagem implements Serializable{
 
     @Override
     public String toString() {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        String dataFormatada = sdf.format(dataHora);
-
         StringBuilder texto = new StringBuilder();
-        texto.append(dataFormatada);
-        texto.append(" - ");
+
+        SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+        String dataFormatada = format2.format(dataHora).toString();
+
         texto.append(peso);
         texto.append(" kg");
+        texto.append(" - ");
+        texto.append(dataFormatada);
 
         return texto.toString();
     }

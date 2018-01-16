@@ -104,6 +104,4 @@ public class ListaPesagemActivity extends AppCompatActivity {
         this.adapter = new ArrayAdapter<Pesagem>(this, android.R.layout.simple_list_item_1, pesagens);
         this.listaPesagem.setAdapter(adapter);
     }
-
-
 }

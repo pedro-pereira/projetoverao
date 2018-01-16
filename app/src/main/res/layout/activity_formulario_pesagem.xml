@@ -28,9 +28,10 @@
 
             <EditText
                 android:id="@+id/edt_data"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_marginRight="12dp"
                 android:layout_toEndOf="@+id/btn_data"
                 android:layout_weight="0.4"
                 android:singleLine="false" />
@@ -53,9 +54,10 @@
 
             <EditText
                 android:id="@+id/edt_horario"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_marginRight="12dp"
                 android:layout_toEndOf="@+id/btn_horario" />
 
         </RelativeLayout>
@@ -63,6 +65,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:orientation="horizontal">
 
             <Button
@@ -71,56 +75,77 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="11dp"
                 android:layout_weight="1"
                 android:text="Localizacao" />
+
+            <TextView
+                android:id="@+id/lblLatitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="22dp"
+                android:layout_toEndOf="@+id/btn_capturar_localizacao"
+                android:layout_weight="1"
+                android:text="Latitude: " />
 
             <TextView
                 android:id="@+id/txtLatitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/txtLongitude"
+                android:layout_toEndOf="@+id/lblLatitude"
                 android:layout_weight="1"
-                android:text="Latitude: " />
+                android:text="0.0" />
+
+            <TextView
+                android:id="@+id/lblLongitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/lblLatitude"
+                android:layout_weight="1"
+                android:text="Longitude: " />
 
             <TextView
                 android:id="@+id/txtLongitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_alignStart="@+id/btn_capturar_localizacao"
-                android:layout_marginStart="143dp"
+                android:layout_toEndOf="@+id/lblLongitude"
                 android:layout_weight="1"
-                android:text="Longitude: " />
+                android:text="0.0" />
         </RelativeLayout>
 
         <Spinner
             android:id="@+id/spn_filial"
-            android:layout_width="362dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="12dp"
-            android:hint="Unidade"/>
+            android:layout_marginRight="12dp"
+            android:hint="Unidade" />
 
         <Spinner
             android:id="@+id/spn_momento"
-            android:layout_width="362dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="12dp"
-            android:hint="Momento"/>
+            android:layout_marginRight="12dp"
+            android:hint="Momento" />
 
         <EditText
             android:id="@+id/edt_peso"
-            android:layout_width="362dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:hint="Peso" />
 
         <Button
             android:id="@+id/btn_inserir_pesagem"
-            android:layout_width="364dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:text="Cadastrar" />
 
     </LinearLayout>
