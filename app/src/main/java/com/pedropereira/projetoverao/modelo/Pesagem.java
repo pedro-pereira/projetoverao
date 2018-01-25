@@ -82,8 +82,8 @@ public class Pesagem implements Serializable{
     public String toString() {
         StringBuilder texto = new StringBuilder();
 
-        SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
-        String dataFormatada = format2.format(dataHora).toString();
+        SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+        String dataFormatada = formatador.format(dataHora).toString();
 
         texto.append(peso);
         texto.append(" kg");

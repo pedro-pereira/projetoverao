@@ -5,12 +5,13 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+
 import android.content.pm.PackageManager;
-
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +31,9 @@ import com.pedropereira.projetoverao.dao.PesagemDao;
 import com.pedropereira.projetoverao.modelo.Pesagem;
 import com.pedropereira.projetoverao.modelo.PesagemHelper;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -63,6 +66,9 @@ public class FormularioPesagemActivity extends AppCompatActivity
     private String momento;
     private String filial;
 
+    static final int REQUEST_LOCATION = 1;
+    LocationManager locationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -81,6 +87,8 @@ public class FormularioPesagemActivity extends AppCompatActivity
         spinnerMomentos = (Spinner) findViewById(R.id.spn_momento);
         botaoInserirPesagem = (Button) findViewById(R.id.btn_inserir_pesagem);
 
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
         // Data
         btnDatePicker.setOnClickListener(this);
 
@@ -88,12 +96,7 @@ public class FormularioPesagemActivity extends AppCompatActivity
         btnTimePicker.setOnClickListener(this);
 
         // Localizacao
-        botaoCapturarLocalizacao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pedirPermissoes();
-            }
-        });
+        botaoCapturarLocalizacao.setOnClickListener(this);
 
         ArrayAdapter<CharSequence> adapter;
 
@@ -148,63 +151,6 @@ public class FormularioPesagemActivity extends AppCompatActivity
         });
     }
 
-    private void pedirPermissoes() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else
-            configurarServico();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    configurarServico();
-                } else {
-                    Toast.makeText(this, "Não vai funcionar!!!", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-        }
-    }
-
-    public void configurarServico() {
-        try {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            LocationListener locationListener = new LocationListener() {
-
-                public void onLocationChanged(Location location) {
-                    atualizar(location);
-                }
-
-                public void onStatusChanged(String provider, int status, Bundle extras) { }
-
-                public void onProviderEnabled(String provider) { }
-
-                public void onProviderDisabled(String provider) { }
-            }
-            ;
-
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-        } catch (SecurityException ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void atualizar(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-
-        txtLatitude.setText(String.valueOf(latitude));
-        txtLongitude.setText(String.valueOf(longitude));
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Object itemAtPosition = parent.getItemAtPosition(position);
@@ -229,7 +175,7 @@ public class FormularioPesagemActivity extends AppCompatActivity
 
         if (v == btnDatePicker) {
             // Get Current Date
-            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT-3"), new Locale("pt", "BR"));
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT-2"), new Locale("pt", "BR"));
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -250,7 +196,7 @@ public class FormularioPesagemActivity extends AppCompatActivity
 
         if (v == btnTimePicker) {
             // Get Current Time
-            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT-3"), new Locale("pt", "BR"));
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT-2"), new Locale("pt", "BR"));
             mHour = c.get(Calendar.HOUR_OF_DAY);
             mMinute = c.get(Calendar.MINUTE);
 
@@ -267,6 +213,70 @@ public class FormularioPesagemActivity extends AppCompatActivity
                                                                 false
                                                                     );
             timePickerDialog.show();
+        }
+
+        if (v == botaoCapturarLocalizacao) {
+            obterLocalizacao();
+            obterEndereco(latitude, longitude);
+        }
+    }
+
+    private void obterLocalizacao() {
+        if( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        } else {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if (location != null){
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                txtLatitude.setText(String.valueOf(latitude));
+                txtLongitude.setText(String.valueOf(longitude));
+/*
+                Toast.makeText(this, "Latitude: " + latitude, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Longitude: " + longitude, Toast.LENGTH_LONG).show();
+*/
+            } else {
+                Toast.makeText(this, "Unable to find correct location.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_LOCATION:
+                obterLocalizacao();
+                break;
+        }
+    }
+
+    public void obterEndereco(Double latitude, Double longitude) {
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses != null && addresses.size() > 0) {
+            Address returnAddress = addresses.get(0);
+
+            String locality = returnAddress.getLocality();
+            String name = returnAddress.getFeatureName();
+            String subLocality = returnAddress.getSubLocality();
+            String country = returnAddress.getCountryName();
+            String region_code = returnAddress.getCountryCode();
+            String zipcode = returnAddress.getPostalCode();
+            String state = returnAddress.getAdminArea();
+
+            Toast.makeText(this, "Bairro: " + subLocality + ", " + locality + "/" + state + ". " + country + "/" + region_code + ". CEP: " + zipcode + ".", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,10 +1,8 @@
 package com.pedropereira.projetoverao.modelo;
 
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.pedropereira.projetoverao.FormularioPesagemActivity;
@@ -20,8 +18,6 @@ import java.util.Date;
  */
 
 public class PesagemHelper {
-
-    private Pesagem pesagem;
 
     private EditText campoData;
     private EditText campoHorario;
@@ -47,7 +43,6 @@ public class PesagemHelper {
         String horario = campoHorario.getText().toString();
 
         Double latitude = 0.0;
-
         if(campoLatitude.getText() != null)
             latitude = Double.valueOf(campoLatitude.getText().toString());
 

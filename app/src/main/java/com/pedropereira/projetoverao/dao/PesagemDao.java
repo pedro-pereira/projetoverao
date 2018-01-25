@@ -5,10 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.pedropereira.projetoverao.modelo.Pesagem;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.Locale;
 public class PesagemDao extends SQLiteOpenHelper {
 
     private static final String DATABASE = "appProjetoVerao";
-    private static final int VERSAO = 15;
+    private static final int VERSAO = 1;
 
     private static final String TABELA = "PESAGEM";
 
@@ -70,13 +70,13 @@ public class PesagemDao extends SQLiteOpenHelper {
 
     public List<Pesagem> getLista() {
         List<Pesagem> lista = new ArrayList<Pesagem>();
-        String sql = "SELECT * FROM " + TABELA + " ORDER BY dataHora DESC;";
+        String sql = "SELECT chave, latitude, longitude, filial, momento, peso, dataHora FROM " + TABELA + " ORDER BY chave DESC";
         Cursor c = getReadableDatabase().rawQuery(sql, null);
         Pesagem pesagem = null;
 
         int i = 0;
 
-        while (c.moveToNext()) {
+        while (c. moveToNext()) {
             pesagem = new Pesagem();
             pesagem.setChave(c.getLong(c.getColumnIndex("chave")));
             pesagem.setLatitude(c.getDouble(c.getColumnIndex("latitude")));
