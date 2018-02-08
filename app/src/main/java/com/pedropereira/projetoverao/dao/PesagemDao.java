@@ -23,7 +23,7 @@ import java.util.Locale;
 public class PesagemDao extends SQLiteOpenHelper {
 
     private static final String DATABASE = "appProjetoVerao";
-    private static final int VERSAO = 1;
+    private static final int VERSAO = 16;
 
     private static final String TABELA = "PESAGEM";
 

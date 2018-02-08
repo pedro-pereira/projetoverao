@@ -44,14 +44,12 @@ public class ListaPesagemActivity extends AppCompatActivity {
         this.listaPesagem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Pesagem pesagemSelecionada = (Pesagem) parent.getItemAtPosition(position);
+                final Pesagem pesagemSelecionada = (Pesagem) parent.getItemAtPosition(position);
 
                 Intent irParaOFormulario = new Intent(ListaPesagemActivity.this, FormularioPesagemActivity.class);
                 irParaOFormulario.putExtra("pesagemSelecionada", pesagemSelecionada);
 
                 startActivity(irParaOFormulario);
-
             }
         });
 
@@ -78,9 +76,8 @@ public class ListaPesagemActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
         MenuItem deletar = menu.add("Deletar");
-        menu.add("Ver exercícios");
-        menu.add("Ver no mapa");
-        menu.add("Ver foto");
+        MenuItem verExercicios = menu.add("Ver exercícios");
+        MenuItem adicionarExercicio = menu.add("Acrescentar exercício");
 
         deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -91,6 +88,26 @@ public class ListaPesagemActivity extends AppCompatActivity {
 
                 carregarListaPesagens();
 
+                return false;
+            }
+        });
+
+        verExercicios.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent irParaVerOsExercicios = new Intent(ListaPesagemActivity.this, FormularioExercicioActivity.class);
+                irParaVerOsExercicios.putExtra("pesagem", pesagem);
+                startActivity(irParaVerOsExercicios);
+                return false;
+            }
+        });
+
+        adicionarExercicio.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent irParaAdicionarExercicio = new Intent(ListaPesagemActivity.this, FormularioExercicioActivity.class);
+                irParaAdicionarExercicio.putExtra("pesagem", pesagem);
+                startActivity(irParaAdicionarExercicio);
                 return false;
             }
         });
